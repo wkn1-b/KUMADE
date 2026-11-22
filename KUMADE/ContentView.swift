@@ -1,24 +1,26 @@
-//
-//  ContentView.swift
-//  KUMADE
-//
-//  Created by 若林優奈 on 2026/11/22.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var collection = ArtworkCollection()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            HomeView()
+                .navigationDestination(for: Destination.self) { destination in
+                    switch destination {
+                    case .workshop:
+                        EditorView()
+                    case .collection:
+                        CollectionView()
+                    }
+                }
         }
-        .padding()
+        .environmentObject(collection)
+        .tint(Workshop.vermilion)
+        .preferredColorScheme(.light)
     }
 }
 
-#Preview {
-    ContentView()
+enum Destination: Hashable {
+    case workshop, collection
 }
