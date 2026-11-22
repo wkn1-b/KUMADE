@@ -113,6 +113,79 @@ struct OrnamentArt: View {
                 line([p(9, 58), p(28, 70), p(76, 70), p(92, 58), p(82, 82), p(26, 82)], fill: red)
                 line([p(34, 76), p(72, 76)])
                 line([p(15, 88), p(26, 85), p(38, 88), p(51, 85), p(63, 88), p(76, 85), p(88, 88)])
+            case .plum:
+                let petals = Path { path in
+                    path.move(to: p(41, 30))
+                    path.addQuadCurve(to: p(59, 30), control: p(50, 0))
+                    path.addQuadCurve(to: p(77, 48), control: p(91, 16))
+                    path.addQuadCurve(to: p(67, 73), control: p(101, 73))
+                    path.addQuadCurve(to: p(33, 73), control: p(51, 104))
+                    path.addQuadCurve(to: p(23, 48), control: p(0, 73))
+                    path.addQuadCurve(to: p(41, 30), control: p(9, 16))
+                    path.closeSubpath()
+                }
+                shape(petals, rose)
+                for tip in [p(50, 33), p(67, 45), p(61, 63), p(39, 63), p(33, 45)] {
+                    line([p(50, 50), tip])
+                    oval(tip.x - 2, tip.y - 2, 4, 4, ivory)
+                }
+                oval(45, 45, 10, 10, gold)
+            case .bamboo:
+                line([p(23, 86), p(45, 17), p(56, 20), p(36, 90)], fill: jade)
+                line([p(35, 52), p(46, 55)])
+                line([p(29, 72), p(41, 75)])
+                line([p(51, 86), p(63, 26), p(73, 28), p(62, 88)], fill: gold)
+                line([p(59, 47), p(69, 49)])
+                line([p(55, 68), p(65, 70)])
+                line([p(49, 37), p(27, 24), p(15, 23), p(26, 34)], fill: jade)
+                line([p(67, 52), p(80, 35), p(92, 32), p(85, 47)], fill: jade)
+                line([p(64, 63), p(83, 54), p(94, 60), p(82, 66)], fill: jade)
+            case .pine:
+                line([p(40, 88), p(47, 65), p(40, 47), p(45, 31), p(58, 31),
+                      p(55, 48), p(62, 63), p(58, 88)], fill: gold)
+                oval(24, 15, 49, 25, jade)
+                oval(11, 38, 45, 24, jade)
+                oval(50, 41, 39, 22, jade)
+                line([p(37, 28), p(48, 25), p(59, 27)])
+                line([p(22, 51), p(33, 48), p(44, 50)])
+                line([p(61, 53), p(70, 50), p(79, 52)])
+            case .fan:
+                let leaf = Path { path in
+                    path.move(to: p(50, 85))
+                    path.addLine(to: p(9, 36))
+                    path.addQuadCurve(to: p(91, 36), control: p(50, 1))
+                    path.closeSubpath()
+                }
+                shape(leaf, red)
+                oval(43, 29, 14, 14, gold)
+                for tip in [p(23, 29), p(35, 24), p(65, 24), p(77, 29)] {
+                    let rib = Path { path in
+                        path.move(to: p(50, 85))
+                        path.addLine(to: tip)
+                    }
+                    art.stroke(rib, with: .color(ivory.opacity(0.75)), lineWidth: 1.2)
+                }
+                oval(46, 81, 8, 8, gold)
+            case .mallet:
+                line([p(48, 42), p(59, 51), p(31, 88), p(21, 80)], fill: gold)
+                line([p(27, 24), p(40, 13), p(85, 48), p(74, 61)], fill: red)
+                oval(19, 14, 25, 26, gold)
+                oval(66, 42, 25, 26, gold)
+                oval(72, 48, 13, 14, ivory)
+                line([p(28, 83), p(38, 86), p(47, 94), p(53, 84)])
+            case .gourd:
+                let body = Path { path in
+                    path.move(to: p(49, 13))
+                    path.addCurve(to: p(63, 46), control1: p(77, 17), control2: p(72, 36))
+                    path.addCurve(to: p(51, 90), control1: p(86, 67), control2: p(75, 90))
+                    path.addCurve(to: p(38, 46), control1: p(24, 90), control2: p(14, 68))
+                    path.addCurve(to: p(49, 13), control1: p(23, 29), control2: p(35, 16))
+                    path.closeSubpath()
+                }
+                shape(body, gold)
+                line([p(48, 16), p(53, 9), p(63, 10)])
+                line([p(39, 40), p(50, 45), p(64, 41), p(66, 47), p(50, 51), p(37, 47)], fill: red)
+                line([p(66, 45), p(76, 51), p(81, 62)])
             }
         }
         .accessibilityHidden(true)

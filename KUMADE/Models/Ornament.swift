@@ -3,6 +3,8 @@ import SwiftUI
 enum Ornament: String, CaseIterable, Identifiable, Codable {
     case cat, coin, okame, daruma, bream, crane, turtle, boat
 
+    case plum, bamboo, pine, fan, mallet, gourd
+
     var id: String { rawValue }
 
     var name: LocalizedStringKey {
@@ -15,6 +17,12 @@ enum Ornament: String, CaseIterable, Identifiable, Codable {
         case .crane: "鶴"
         case .turtle: "亀"
         case .boat: "宝船"
+        case .plum: "梅の花"
+        case .bamboo: "竹"
+        case .pine: "松"
+        case .fan: "扇"
+        case .mallet: "打ち出の小槌"
+        case .gourd: "ひょうたん"
         }
     }
 
@@ -27,6 +35,12 @@ enum Ornament: String, CaseIterable, Identifiable, Codable {
         case .bream: "祝いごと"
         case .crane, .turtle: "長寿"
         case .boat: "福や豊かさ"
+        case .plum: "春の訪れ"
+        case .bamboo: "健やかな成長"
+        case .pine: "長寿"
+        case .fan: "末広がりの繁栄"
+        case .mallet: "福や豊かさ"
+        case .gourd: "無病息災"
         }
     }
 
@@ -40,6 +54,12 @@ enum Ornament: String, CaseIterable, Identifiable, Codable {
         case .crane: "「鶴は千年、亀は万年」ということわざにも登場します。"
         case .turtle: "鶴とともに、長寿を願う意匠に用いられます。"
         case .boat: "七福神や宝を載せた船の絵は、正月の縁起物として親しまれています。"
+        case .plum: "早春に咲く花。松・竹とともに「松竹梅」の祝いの意匠に用いられます。"
+        case .bamboo: "節を持ち、まっすぐ伸びる植物です。松竹梅や門松にも使われます。"
+        case .pine: "冬も緑を保つ常緑樹です。正月の門松にも使われます。"
+        case .fan: "開くと先が広がる形から、「末広」とも呼ばれます。"
+        case .mallet: "大黒天が持つ小槌として知られ、昔話『一寸法師』にも登場します。"
+        case .gourd: "六つのひょうたんを「六瓢（むびょう）」と読み、「無病」に掛ける意匠があります。"
         }
     }
 }
@@ -50,6 +70,10 @@ struct PlacedOrnament: Identifiable, Codable {
     var position: CGPoint
     var scale: CGFloat = 1
     var rotation: Double = 0
+
+    static func boundedScale(_ value: CGFloat) -> CGFloat {
+        min(1.8, max(0.55, value))
+    }
 
     static func bounded(_ point: CGPoint, scale: CGFloat = 1) -> CGPoint {
         // Keep larger pieces clear of the board edge while allowing overlap over the rake.

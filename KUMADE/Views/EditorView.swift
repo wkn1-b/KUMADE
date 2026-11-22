@@ -21,9 +21,14 @@ struct EditorView: View {
                     .accessibilityHidden(true)
                 VStack(spacing: 0) {
                     KumadeCanvas(ornaments: ornaments, selection: selection,
-                                 select: select, move: move, drop: add)
+                                 select: select, move: move, drop: add, transform: transform)
                     if let selection, let item = ornaments.first(where: { $0.id == selection }) {
                         controls(for: item)
+                    } else {
+                        Text("飾りをドラッグして配置")
+                            .font(.subheadline)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .background(Workshop.paper)
                     }
                     if let information {
                         infoPanel(information)
@@ -56,8 +61,6 @@ struct EditorView: View {
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible())], spacing: 10) {
                 ForEach(Ornament.allCases) { kind in
                     Button {
-                        let offset = CGFloat(ornaments.count % 5 - 2) * 0.038
-                        add(kind, CGPoint(x: 0.5 + offset, y: 0.39 + abs(offset) * 0.45))
                         information = kind
                     } label: {
                         VStack(spacing: 4) {
@@ -78,7 +81,8 @@ struct EditorView: View {
                     }
                     .buttonStyle(.plain)
                     .draggable(kind.rawValue)
-                    .accessibilityHint("熊手に追加し、意味と由来を表示します")
+                    .accessibilityAddTraits(information == kind ? .isSelected : [])
+                    .accessibilityHint("意味と由来、追加ボタンを表示します")
                 }
             }
             .padding(14)
@@ -91,7 +95,7 @@ struct EditorView: View {
             infoContent(kind)
             ScrollView { infoContent(kind) }
         }
-        .frame(maxHeight: 142)
+        .frame(maxHeight: 164)
         .background(Workshop.paper)
         .overlay(alignment: .top) { Divider().accessibilityHidden(true) }
     }
@@ -103,6 +107,13 @@ struct EditorView: View {
                 Text(kind.name).font(Workshop.serif(.headline)).accessibilityAddTraits(.isHeader)
                 Text("意味　").fontWeight(.semibold) + Text(kind.meaning)
                 Text("由来　").fontWeight(.semibold) + Text(kind.origin)
+                Button {
+                    let offset = CGFloat(ornaments.count % 5 - 2) * 0.038
+                    add(kind, CGPoint(x: 0.5 + offset, y: 0.39 + abs(offset) * 0.45))
+                } label: {
+                    Label("追加", systemImage: "plus")
+                }
+                .buttonStyle(WorkshopButton())
             }
             .font(.subheadline)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -169,8 +180,14 @@ struct EditorView: View {
     }
 
     private func resize(_ id: UUID, by amount: CGFloat) {
+        guard let item = ornaments.first(where: { $0.id == id }) else { return }
+        transform(id, item.scale + amount, item.rotation)
+    }
+
+    private func transform(_ id: UUID, _ scale: CGFloat, _ rotation: Double) {
         change(id) {
-            $0.scale = min(1.8, max(0.55, $0.scale + amount))
+            $0.scale = PlacedOrnament.boundedScale(scale)
+            $0.rotation = rotation.truncatingRemainder(dividingBy: 360)
             $0.position = PlacedOrnament.bounded($0.position, scale: $0.scale)
         }
     }
