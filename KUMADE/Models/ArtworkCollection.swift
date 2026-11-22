@@ -1,5 +1,5 @@
+import Combine
 import Foundation
-import SwiftUI
 
 struct Artwork: Codable, Identifiable {
     var id = UUID()
